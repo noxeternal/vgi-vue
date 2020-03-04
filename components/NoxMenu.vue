@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-navigation-drawer :clipped="clipped" v-model="drawer" fixed app>
-      <v-list v-for="(item, i) in data" :key="i">
-        <label v-text="item.title" class="font-weight-bold"></label>
+      <v-list v-if="data" v-for="(item, i) in data" :key="i">
+        <label v-text="item.text" class="font-weight-bold"></label>
         <v-list-tile v-for="(item, i) in item.items" :to="item.to" :key="i" router exact>
           <v-list-tile-action>
             <v-icon v-html="item.icon" />
@@ -45,12 +45,26 @@
 
 <script>
   export default {
-    data() {
+    // async asyncData ({$axios}) {
+    //   console.log('getting')
+    //   const { data } = await $axios.$get('https://noxeternal.net/server/enumData.php')
+    //   console.log('got')
+    //   return { data }
+    // },
+    data () {
       return {
         clipped: false,
         drawer: true,
         fixed: false,
-        data: [
+        data: []
+      }
+    },
+    async mounted () {
+      const { data } = await this.$axios.$get('https://noxeternal.net/server/enumData.php')
+      this.data = data
+    }
+  }
+/* [
           { 
             title: "Console",
             items: [
@@ -228,14 +242,4 @@
               {title: "Console"}
             ]
           }
-        ]
-      }
-    }
-  }
-  /*
-          items: []
-          { icon: 'apps', title: 'Welcome', to: '/' },
-          { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
-        ],
-  */
-</script>
+        ] */</script>
